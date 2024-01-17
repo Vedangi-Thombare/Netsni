@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/logincss.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+
+    <title>Login</title>
+</head>
+
+<body>
+    <form action="/" method="POST",>
+        <div id="login">
+            <div class="parent">
+                <div class="login">
+
+                    <span class="welcome "> Welcome back!</span>
+                    <span class="info"
+                        style="    margin-top: 123px; display: table-cell; padding-left: 198px; line-height: 26px;">
+                        Please Login into your account</span>
+                     
+                    <div class="col" style="display: flex; align-items: center;">
+                        <span
+                            style=" line-height: 3; padding-top: 24px; padding-right: 170px; font-family:Poppins, sans-serif;">
+                            Email address</span>
+
+                        <input type="email" id="email" name="email" required
+                            style="width: 292px; height: 38px;border-radius: 8px; background-color: #f1f1f1;border: none;outline: none;">
+
+                        <span
+                            style=" padding-top: 17px; padding-right: 200px; line-height: 2; font-family:Poppins, sans-serif;">
+                            Password</span>
+                         <div>   
+                        <input type="password" id="password" name="password"  minlength="8" required 
+                            style="width: 293px; height: 38px;border-radius: 8px; background-color: #f1f1f1;border: none;outline: none;">
+                            <div style="left: 277px;  display: flex; flex-flow: column; width: 17px; padding-right: 20px;
+                            position: relative;">
+                            
+                            <span id= "eye_icon" class="material-symbols-outlined" onclick="eye()" cursor="pointer"> visibility_off </span>
+                           </div>
+
+                        </div> 
+                         <button type="submit"
+                            style="padding-top: 4px;margin-top: 37px;width: 295px;
+                         height: 48px;border-radius: 10px; cursor: pointer; font-size: 20px;color: white;background-color: black; font-family:Poppins, sans-serif;">Login</button>
+                    
+                        <span
+                            style="color: darkgray; padding-top: 11px; padding-right: 200px;padding-left:119px; line-height: 2; font-family:Poppins, sans-serif;">
+                            Don't have an account yet?</span>
+                        <a href="/registration" style="color: black;padding-left: 295px; display: flex;
+                      margin-top: -27px; text-decoration: none;"> Create an account</a>
+                    </div>
+                </div>
+                <div class="image">
+                    <img src="static/images/login.png" alt="login illustration"
+                        style="height: -webkit-fill-available;width: auto;">
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+   
+<script>
+    
+
+    function eye() {
+        var passwordInput = document.getElementById('password');
+        var eyeIcon = document.getElementById('eye_icon');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeIcon.textContent = 'visibility';
+        } else {
+            passwordInput.type = 'password';
+            eyeIcon.textContent = 'visibility_off';
+        }
+    }
+    
+</script>
+</body>
+
+
+</html>

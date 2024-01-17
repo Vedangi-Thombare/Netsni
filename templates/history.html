@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+  <title>History</title>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 90%;
+      margin: 0 auto;
+      padding-top: 20px;
+    }
+
+    .packet-details {
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .packet-details p {
+      margin: 5px 0;
+    }
+
+    .packet-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .packet-table th,
+    .packet-table td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .tcp {
+      background-color: #c3c9c3;
+    }
+
+    .udp {
+      background-color: #f5bf6e;
+    }
+
+    .long-packet {
+      background-color: rgb(241, 172, 172);
+    }
+
+    /* Updated style for the packet div */
+    .packet {
+      background: #e6eae6;
+      margin-left: 19px;
+      height: 625px;
+      width: 1200px; /* Adjusted width to include negative margin */
+      overflow-y: scroll;
+      margin-top: 17px;
+      font-family: monospace;
+      font-size: 14px;
+      padding: 20px; /* Added padding for better appearance */
+    }
+  </style>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+  {% include "components/sidebar.html" %}
+  <div class="container">
+    <h2 style="margin-top: -12px; margin-left: 21px;">Packet History</h2>
+    <ul id="packetList">
+      <!-- Display the list of captured packets here -->
+      {% for packet in packets %}
+      <li class="packet-item" data-packet-number="{{ packet.number }}">{{ packet.summary }}</li>
+      {% endfor %}
+    </ul>
+    <div id="packetDetails" class="packet-details">
+      <!-- Display packet details here when a packet is selected -->
+      <div class="packet">
+        <table class="packet-table">
+          <thead>
+            <tr style="height:50px;">
+              <th style="background-color: white; ">Summary</th>
+              <th style="background-color: white;">Length</th>
+              <th style="background-color: white;">Port</th>
+              <th style="background-color: white;">Source IP</th>
+              <th style="background-color: white;">Destination IP</th>
+              <th style="background-color: white;">Timestamp</th>
+            </tr>
+          </thead>
+          <tbody id="packetOutput"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      var packets = [];
+
+      function updatePacketTable() {
+        $.get("/get_packets", function (data) {
+          packets = data.packets;
+          var packetOutput = $("#packetOutput");
+          packetOutput.empty(); // Clear previous packets
+          packets.forEach(function (packet) {
+            var packetRow = "<tr>";
+            packetRow += "<td>" + packet.summary + "</td>";
+            packetRow += "<td>" + packet.length + "</td>";
+            packetRow += "<td>" + packet.srcPort + "</td>";
+            packetRow += "<td>" + packet.source + "</td>";
+            packetRow += "<td>" + packet.destination + "</td>";
+            packetRow += "<td>" + packet.timestamp + "</td>"
+            packetRow += "</tr>";
+
+            var tableRow = $(packetRow);
+            if (packet.protocol === "TCP") {
+              tableRow.addClass("tcp"); // Add CSS class 'tcp' for TCP packets
+            } else if (packet.protocol === "UDP") {
+              tableRow.addClass("udp"); // Add CSS class 'udp' for UDP packets
+            }
+            if (packet.length > 1000) {
+              tableRow.addClass("long-packet");
+            }
+            packetOutput.append(tableRow); // Append to show all packets
+          });
+        });
+      }
+
+      // Call the updatePacketTable function immediately on page load
+      updatePacketTable();
+
+      // Poll every 1 second for real-time updates
+      setInterval(updatePacketTable, 1000);
+    });
+  </script>
+</body>
+
+</html>

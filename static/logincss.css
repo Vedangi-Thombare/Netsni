@@ -1,0 +1,81 @@
+body{
+    width: 100vw;
+    height: 100vh;
+    font-family: Poppins, sans-serif;
+      margin: 0;
+      background-color: white;
+    }
+    
+    /* aligning divs side by side */
+    .parent{
+        display: flex;
+        width: 100%;
+    }
+    .login{
+        width: 690px;
+        height: 537px;
+        background-color: white;
+         margin: 10px; 
+         margin-left: 39px;
+        margin-top: 64px;
+        margin-right: 46px;
+       
+    }
+    
+    .image{
+        width: 574px;
+        height: 519px;
+        background-color:white;
+        margin-top: 64px;
+        margin-right: 20px;
+    
+    }
+    
+    
+    
+    /* email and password */
+    
+    .login{
+        font-family: Poppins, sans-serif;
+    }
+    .login .welcome{
+        font-weight: bold;
+        font-size: 23px;
+        padding-left: 200px;
+        align-items: center;
+        display: flex;
+        justify-items: center;
+        padding-top: 96px;
+    
+    }
+    
+     .login .info{
+        color: darkgray;
+        margin-top: 123px;
+        display: table-cell;
+        padding-left: 199px;
+        line-height: 26px;
+       
+    } 
+    
+    .col{
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .col .email .password{
+        border-radius: 8px;
+        width: 240px;
+        height: 28px;
+    }
+ 
+    #eye_icon{
+        left: -17px;
+        position: relative;
+        display: flex;
+        justify-content: end;
+        margin-top: -30px;
+        font-size: 24px;
+    }
+

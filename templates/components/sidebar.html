@@ -1,0 +1,57 @@
+<div id="sidebar">
+    <div class="sideHead">
+        <div class="info">
+            
+             <!-- <span class="name">{session["name"]}</span> -->
+            <!-- <span class="email" style="text-align: justify;">{{session[email]}}</span>  -->
+
+            {% if session['is_logged_in'] %}
+            <span class="email" style="text-align: justify;">{{ session['email'] }}</span> 
+            {% endif %}
+        </div>
+        <button id="sideToggler" onclick="toggleSidebar()"
+            class="material-symbols-outlined toggler">keyboard_double_arrow_left</button>
+    </div>
+    <hr />
+    <ul>
+        <li>
+            <a class="button" href="/dashboard">
+                <span class="material-symbols-outlined">grid_view</span>
+                <span class="itemName">Dashboard</span>
+            </a>
+        </li>
+
+        <li>
+            <a class="button" href="/packetcapture">
+                <span class="material-symbols-outlined">manage_search</span>
+                <span class="itemName">Packet-Capture</span>
+            </a>
+        </li>
+        <li>
+            <a class="button" href="/alert">
+                <span class="material-symbols-outlined">warning</span>
+                <span class="itemName">Alert</span>
+            </a>
+        </li>
+         <li>
+             <a class="button" href="/history"> 
+            <span class="material-symbols-outlined">history</span>
+            <span class="itemName">History</span>
+            </a>
+        </li>
+        <li>
+            <a class="button" button id="logoutbutton" href="/logout">
+                <span class="material-symbols-outlined">logout</span>
+                <span class="itemName">Logout</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        sidebar.classList.toggle("collapsed");
+    }
+</script>

@@ -1,0 +1,91 @@
+.body{
+    background-color: white !important;
+}
+/* ALERT TABLE */
+.activealert{
+    width: 72%;
+    height: 98%;
+    background-color: white;
+    margin-left: 6px;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    font-size: 12px;
+    font-family: monospace;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+
+
+.rightinfo{
+    width: 25%;
+    height: 100%;
+    background-color: #ededed;
+    float: right;
+    overflow: auto;
+    margin-right: 3px;
+    margin-left: 6px;
+    
+}
+
+/* doughnut graph */
+.doughnut{
+    width: 100%;
+    height: 50%;
+    background-color: white;
+    float: right;
+    margin-top: 34px;
+}
+
+#container { 
+    width: 100%; 
+    height: 100%;
+    padding: 0;
+    background-color: #ededed; 
+    margin-bottom: 47px;
+    margin-top: -22px;
+   
+}
+
+
+/* count */
+.count{
+
+    width: 100%;
+    height: 40%;
+    background-color: white;
+    float: right;
+    margin-top: 17px;
+    border-radius: 4px;
+}
+
+.num .h4style{
+    align-items: center;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    margin-top: 62px;
+    font-size: 45px;
+}
+
+.num .countspan{
+    display: flex;
+    margin-top: -82px;
+    font-size: 19px;
+    margin-left: 140px;
+    font-weight: 600;
+    line-height: 1;
+
+}

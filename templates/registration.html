@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/registercss.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+    <title>Register</title>
+</head>
+
+<body>
+    <form action="/registration" method="POST">
+        <div class="parent">
+            <div class="content">
+                <div>
+                    <span class="welcome "> Glad to have you here</span>
+                </div>
+
+                <div>
+                    <span class="info">Please enter your credentials</span>
+                </div>
+
+                
+                <!-- <input type="text" id="name" name="name" required pattern="[A-Za-z0-9]+"
+                    style="width: 292px; height: 38px;border-radius: 8px; background-color: #f1f1f1;border: none;outline: none;"> -->
+
+                <div>
+                    <span class="title" style="font-family:Poppins, sans-serif;line-height: 3">Email</span>
+                </div>
+
+                <input type="email" id="email" name="email" required
+                    style="width: 292px; height: 38px;border-radius: 8px; background-color: #f1f1f1;border: none;outline: none;">
+
+                <div>
+                    <span class="title" style="font-family:Poppins, sans-serif;line-height: 3">Password</span>
+                </div>
+
+                <!-- <input type="password" id="password" name="password" minlength="8" required
+                    style="width: 292px; height: 38px;border-radius: 8px; background-color: #f1f1f1;border: none;outline: none;"> -->
+                    <div>   
+                        <input type="password" id="password" name="password"  minlength="8" required 
+                            style="width: 293px; height: 38px;border-radius: 8px; background-color: #f1f1f1;border: none;outline: none;">
+                            <div style="position: relative;
+                            display: flex;
+                            flex-direction: column;
+                            left: 249px;">
+                            <span id= "eye_icon" class="material-symbols-outlined" onclick="eye()" cursor="pointer"> visibility_off </span>
+                        </div>
+                        </div>
+
+                <button type="submit"
+                    style="padding-top: 4px;margin-top: 37px;width: 295px;
+                    height: 48px;border-radius: 10px; cursor: pointer; font-size: 20px;color: white;background-color: black; font-family:Poppins, sans-serif;">Register</button>
+
+            </div>
+    </form>
+
+    <div class="image" style="width: 50%;height: 56%;">
+        <img src="static/images/register.png" alt="registration illustration"
+            style="margin-top: -83px;
+        
+            width: auto;
+            height: 608px;
+            width: 100%;
+            margin-left: -4px;">
+
+    </div>
+    </div>
+
+
+    <script>
+
+
+        function eye() {
+            var passwordInput = document.getElementById('password');
+            var eyeIcon = document.getElementById('eye_icon');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.textContent = 'visibility';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.textContent = 'visibility_off';
+            }
+        }
+
+    </script>
+</body>
+
+</html>

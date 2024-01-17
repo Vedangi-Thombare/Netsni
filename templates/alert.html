@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Alerts</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/alertcss.css">
+    <link rel="stylesheet" href="static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        .alert-table-container {
+            max-height: 800px; /* Adjust the height based on your design */
+            overflow-y: auto;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> <!-- Add Bootstrap JS -->
+    <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-core.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-pie.min.js"></script>
+</head>
+
+<body>
+   {% include "components/sidebar.html" %}
+    <div class="activealert">
+        <h3 style="font-family: monospace; font-size: 23px; margin-left: 20px">Active Alerts</h3>
+        <div class="alert-table-container">
+            <table class="alert-table">
+                <tr>
+                    <th style="font-size: 14px;">Alert Type</th>
+                    <th style="font-size: 14px;">Time-stamp</th>
+                    <th style="font-size: 14px;">Severity</th>
+                    <th style="font-size: 14px;">Status</th>
+                    <th style="font-size: 14px;">Source</th>
+                    <th style="font-size: 14px;">Destination</th>
+                    <th style="font-size: 14px;">Source Port</th>
+                    <th style="font-size: 14px;">Destination Port</th>
+                    <th style="font-size: 14px;">Protocol</th>
+                    <th data-toggle="tooltip" title="Packet Summary" style="font-size: 14px;">Summary</th>
+                    {% for alert in alerts %}
+                    <tr class="{% if alert['alert_type'] == 'SQL Injection' %}high{% elif alert['severity'] == 'Moderate' %}moderate{% endif %}">
+                        <td>{{ alert.get("alert_type", "N/A") }}</td>
+                        <td>
+                            {% if alert.get("packet_info") and alert["packet_info"].get("timestamp") %}
+                                {{ alert["packet_info"]["timestamp"] }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>{{ alert.get("severity", "N/A") }}</td>
+                        <td>{{ alert.get("status", "N/A") }}</td>
+                        <td>
+                            {% if alert.get("packet_info") and alert["packet_info"].get("source") %}
+                                {{ alert["packet_info"]["source"] }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if alert.get("packet_info") and alert["packet_info"].get("destination") %}
+                                {{ alert["packet_info"]["destination"] }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if alert.get("packet_info") and alert["packet_info"].get("srcPort") %}
+                                {{ alert["packet_info"]["srcPort"] }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if alert.get("packet_info") and alert["packet_info"].get("dstPort") %}
+                                {{ alert["packet_info"]["dstPort"] }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if alert.get("packet_info") and alert["packet_info"].get("protocol") %}
+                                {{ alert["packet_info"]["protocol"] }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td data-toggle="tooltip" title="{% if alert.get('packet_info') and alert['packet_info'].get('summary') %}{{ alert['packet_info']['summary'] }}{% else %}N/A{% endif %}" style="font-size: 11px;">
+                            <button class="btn btn-link" data-toggle="modal" data-target="#alertDetailsModal{{ loop.index }}" style="font-size: 11px;">
+                                {% if alert.get('packet_info') and alert['packet_info'].get('summary') %}{{ alert['packet_info']['summary'] }}{% else %}N/A{% endif %}
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Modal for Alert Details -->
+                    <div class="modal fade" id="alertDetailsModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="alertDetailsModalLabel" aria-hidden="true" style="font-family: monospace;">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="alertDetailsModalLabel">Alert Details</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Alert Type:</strong> {{ alert.get("alert_type", "N/A") }}</p>
+                                    <p><strong>Timestamp:</strong> {{ alert["packet_info"].get("timestamp", "N/A") }}</p>
+                                    <p><strong>Severity:</strong> {{ alert.get("severity", "N/A") }}</p>
+                                    <p><strong>Status:</strong> {{ alert.get("status", "N/A") }}</p>
+                                    <p><strong>Source:</strong> {{ alert["packet_info"].get("source", "N/A") }}</p>
+                                    <p><strong>Destination:</strong> {{ alert["packet_info"].get("destination", "N/A") }}</p>
+                                    <p><strong>Source Port:</strong> {{ alert["packet_info"].get("srcPort", "N/A") }}</p>
+                                    <p><strong>Destination Port:</strong> {{ alert["packet_info"].get("dstPort", "N/A") }}</p>
+                                    <p><strong>Protocol:</strong> {{ alert["packet_info"].get("protocol", "N/A") }}</p>
+                                    <p><strong>Summary:</strong> {{ alert["packet_info"].get("summary", "N/A") }}</p>
+                                
+                                    <!-- Display Packet Data -->
+                                    <p><strong>Packet Data:</strong></p>
+                                     <pre>{{ alert["packet_info"].get("packet_data", "N/A") }}</pre>
+                                </div>
+                                
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <div class="rightinfo">
+        <div class="doughnut">
+            <!-- <h3 style="color: black;">Alert</h3> -->
+            <div id="container"></div>
+        </div>
+
+        <div class="count">
+            <h3 style="color: black;">TODAY</h3>
+            <div class="num">
+                <h4 class="h4style" id="alertCount">{{ alerts|length }}</h4>
+                <span class="countspan">COUNT</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            var chart = anychart.pie();
+            chart.innerRadius('55%');
+            var palette = anychart.palettes.distinctColors();
+            palette.items([
+                { color: 'red' },
+                { color: 'orange' },
+                { color: 'yellow' },
+                { color: 'green' }
+            ]);
+            chart.palette(palette);
+            chart.title('Severity');
+            chart.container('container');
+            chart.background().fill('white');
+    
+            // Function to update the chart
+            function updateChart() {
+                $.ajax({
+                    type: 'GET',
+                    url: '/get_alerts_count',
+                    success: function (data) {
+                        var counts = data.counts;
+                        counts.Low = counts.Low || 0;
+                        counts.Moderate = counts.Moderate || 0;
+    
+                        var chartData = [
+                            { x: 'High', value: counts.High },
+                            { x: 'Moderate', value: counts.Moderate },
+                            { x: 'Low', value: counts.Low },
+                            { x: 'Unknown', value: counts.Unknown || 0 }
+                        ];
+    
+                        chart.data(chartData);
+                        chart.draw();
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+    
+            // Function to update the total alert count
+            function updateAlertCount() {
+                $.ajax({
+                    type: 'GET',
+                    url: '/get_alerts_count',
+                    success: function (data) {
+                        var totalCount = data.counts.High + data.counts.Moderate + data.counts.Low;
+                        $('#alertCount').text(totalCount);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+    
+            // Function to update the alert table
+            function updateAlertTable() {
+                $.ajax({
+                    type: 'GET',
+                    url: '/get_alerts',
+                    success: function (data) {
+                        var alertTable = $('.alert-table tbody');
+                        alertTable.empty();
+    
+                        for (var i = 0; i < data.alerts.length; i++) {
+                            var alert = data.alerts[i];
+                            var row = createTableRow(alert, i);
+                            alertTable.append(row);
+                            updateAlertDetailsModal(i, alert);
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+    
+            // Function to create a table row for an alert
+            function createTableRow(alert, index) {
+                return '<tr class="' + (alert['alert_type'] === 'SQL Injection' ? 'high' : (alert['severity'] === 'Moderate' ? 'moderate' : '')) + '">' +
+                    '<td>' + alert.get("alert_type", "N/A") + '</td>' +
+                    '<td>' + (alert["packet_info"] ? alert["packet_info"].timestamp || 'N/A' : 'N/A') + '</td>' +
+                    '<td>' + alert.get("severity", "N/A") + '</td>' +
+                    '<td>' + alert.get("status", "N/A") + '</td>' +
+                    '<td>' + (alert["packet_info"] ? alert["packet_info"].source || 'N/A' : 'N/A') + '</td>' +
+                    '<td>' + (alert["packet_info"] ? alert["packet_info"].destination || 'N/A' : 'N/A') + '</td>' +
+                    '<td>' + (alert["packet_info"] ? alert["packet_info"].srcPort || 'N/A' : 'N/A') + '</td>' +
+                    '<td>' + (alert["packet_info"] ? alert["packet_info"].dstPort || 'N/A' : 'N/A') + '</td>' +
+                    '<td>' + (alert["packet_info"] ? alert["packet_info"].protocol || 'N/A' : 'N/A') + '</td>' +
+                    '<td data-toggle="tooltip" title="' + (alert["packet_info"] ? alert["packet_info"].summary || 'N/A' : 'N/A') + '" style="font-size: 11px;">' +
+                    '<button class="btn btn-link" data-toggle="modal" data-target="#alertDetailsModal' + index + '">' +
+                    (alert["packet_info"] ? alert["packet_info"].summary || 'N/A' : 'N/A') + '</button></td></tr>';
+            }
+    
+            // Function to update the content of the alert details modal
+            function updateAlertDetailsModal(index, alert) {
+                var modal = $('#alertDetailsModal' + index);
+                modal.find('.modal-body').html(
+                    '<p><strong>Alert Type:</strong> ' + alert.get("alert_type", "N/A") + '</p>' +
+                    '<p><strong>Timestamp:</strong> ' + (alert["packet_info"] ? alert["packet_info"].timestamp || 'N/A' : 'N/A') + '</p>' +
+                    '<p><strong>Severity:</strong> ' + alert.get("severity", "N/A") + '</p>' +
+                    '<p><strong>Status:</strong> ' + alert.get("status", "N/A") + '</p>' +
+                    '<p><strong>Source:</strong> ' + (alert["packet_info"] ? alert["packet_info"].source || 'N/A' : 'N/A') + '</p>' +
+                    '<p><strong>Destination:</strong> ' + (alert["packet_info"] ? alert["packet_info"].destination || 'N/A' : 'N/A') + '</p>' +
+                    '<p><strong>Source Port:</strong> ' + (alert["packet_info"] ? alert["packet_info"].srcPort || 'N/A' : 'N/A') + '</p>' +
+                    '<p><strong>Destination Port:</strong> ' + (alert["packet_info"] ? alert["packet_info"].dstPort || 'N/A' : 'N/A') + '</p>' +
+                    '<p><strong>Protocol:</strong> ' + (alert["packet_info"] ? alert["packet_info"].protocol || 'N/A' : 'N/A') + '</p>' +
+                    '<p><strong>Summary:</strong> ' + (alert["packet_info"] ? alert["packet_info"].summary || 'N/A' : 'N/A') + '</p>' +
+                    '<p><strong>Packet Data:</strong></p><pre>' + (alert["packet_info"] ? alert["packet_info"].packet_data || 'N/A' : 'N/A') + '</pre>'
+                );
+            }
+    
+            // Call the update functions initially
+            updateChart();
+            updateAlertCount();
+            updateAlertTable();
+    
+            // Set intervals for updating the chart, alert count, and alert table
+            setInterval(updateChart, 5000); // Update the chart every 5 seconds
+            setInterval(updateAlertCount, 5000); // Update the alert count every 5 seconds
+            setInterval(updateAlertTable, 5000); // Update the alert table every 5 seconds
+        });
+    </script>
+    
+</body>
+
+</html>
